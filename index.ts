@@ -36,7 +36,7 @@ function validateAxis(str: any) {
 }
 
 function validateDirection(str: EnumDirectionStrings) {
-    if ( Direction[str]!= undefined) {
+    if (Direction[str] != undefined) {
         return true;
     }
     console.log(`${str} is bad direction`);
