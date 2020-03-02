@@ -1,22 +1,4 @@
-import { Room } from './room';
-
-enum axisEnum {
-  axisX,
-  axisY,
-  axisZ
-}
-type axisEnumStrings = keyof typeof axisEnum;
-
-export enum Direction {
-  NORTH,
-  WEST,
-  SOUTH,
-  EAST,
-}
-export type EnumDirectionStrings = keyof typeof Direction;
-
-
-
+import { Room, Direction, EnumDirectionStrings, axisEnumStrings } from './room';
 export class Drone {
   axisX: number;
   axisY: number;
@@ -25,12 +7,12 @@ export class Drone {
   room: Room;
 
 
-  constructor(X: number, Y: number, Z: number, F: EnumDirectionStrings) {
+  constructor(X: number, Y: number, Z: number, F: EnumDirectionStrings, room: Room) {
     this.axisX = X;
     this.axisY = Y;
     this.axisZ = Z;
     this.face = Direction[F];
-    this.room = new Room();
+    this.room = room;
   }
 
 
@@ -45,13 +27,13 @@ export class Drone {
   }
 
 
-  changeDirection(direction: string) {
+  changeDirection(direction: 'LEFT'| 'RIGHT') {
     switch (direction) {
       case 'LEFT':
-        this.face = this.face === Direction.EAST ? Direction.NORTH : this.face+1;
+        this.face = this.face === Direction.EAST ? Direction.NORTH : this.face + 1;
         break;
       case 'RIGHT':
-        this.face = this.face === Direction.NORTH ? Direction.EAST : this.face-1;
+        this.face = this.face === Direction.NORTH ? Direction.EAST : this.face - 1;
         break;
       default:
         console.log(`Unknown direction: ${direction}.`);
@@ -78,7 +60,7 @@ export class Drone {
     }
   }
 
-  currentPosition() {
+  reportPosition() {
     console.log(`axisX:${this.axisX}, axisY:${this.axisY}, axisZ:${this.axisZ}, face:${Direction[this.face]}`)
     return {
       axisX: this.axisX,
@@ -88,7 +70,7 @@ export class Drone {
     };
   }
 
-  move(command: string) {
+  move(command: 'UP'|'DOWN'|'MOVE') {
     switch (command) {
       case "UP":
         this.room.axisZ > this.axisZ ?

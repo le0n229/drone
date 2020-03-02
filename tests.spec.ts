@@ -1,11 +1,13 @@
-import {assert} from 'chai';
-import {Drone} from './drone';
+import { assert } from 'chai';
+import { Drone } from './drone';
+import { Room } from './room';
 
 describe("drone tests", () => {
-  let drone = new Drone(0, 0, 0, "NORTH");
+  const room = new Room();
+  let drone = new Drone(0, 0, 0, "NORTH",room);
 
   it("should get current position and compare with right", async () => {
-    assert.deepEqual(drone.currentPosition(), {
+    assert.deepEqual(drone.reportPosition(), {
       axisX: 0,
       axisY: 0,
       axisZ: 0,
@@ -14,7 +16,7 @@ describe("drone tests", () => {
   });
   it("should get current position after move up", async () => {
     drone.move('UP');
-    assert.deepEqual(drone.currentPosition(), {
+    assert.deepEqual(drone.reportPosition(), {
       axisX: 0,
       axisY: 0,
       axisZ: 1,
@@ -23,7 +25,7 @@ describe("drone tests", () => {
   });
   it("should get current position after once move north", async () => {
     drone.move('MOVE');
-    assert.deepEqual(drone.currentPosition(), {
+    assert.deepEqual(drone.reportPosition(), {
       axisX: 0,
       axisY: 1,
       axisZ: 1,
@@ -37,7 +39,7 @@ describe("drone tests", () => {
     drone.move('MOVE');
     drone.move('MOVE');
     drone.move('MOVE');
-    assert.deepEqual(drone.currentPosition(), {
+    assert.deepEqual(drone.reportPosition(), {
       axisX: 0,
       axisY: 5,
       axisZ: 1,
@@ -50,7 +52,7 @@ describe("drone tests", () => {
     drone.move('MOVE');
     drone.move('MOVE');
     drone.move('MOVE');
-    assert.deepEqual(drone.currentPosition(), {
+    assert.deepEqual(drone.reportPosition(), {
       axisX: 0,
       axisY: 5,
       axisZ: 1,
@@ -67,7 +69,7 @@ describe("drone tests", () => {
     drone.move('MOVE');
     drone.move('MOVE');
     drone.move('MOVE');
-    assert.deepEqual(drone.currentPosition(), {
+    assert.deepEqual(drone.reportPosition(), {
       axisX: 5,
       axisY: 5,
       axisZ: 1,

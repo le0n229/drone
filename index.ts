@@ -1,18 +1,27 @@
 import * as readline from "readline";
-import { Drone, Direction, EnumDirectionStrings } from './drone';
+import { Room, EnumDirectionStrings } from './room';
+import { Drone } from './drone';
 
-const droneCreated = false;
+const room = new Room();
+let droneCreated = false;
 let drone: Drone;
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-rl.question('Lets create new drone? ', (answer: any) => {
-    parseCommand(answer);
+firstQuestion();
 
-    askQuestion();
-});
+function firstQuestion() {
+    rl.question('Lets create new drone? ', (answer: any) => {
+        parseCommand(answer);
+        if (droneCreated) {
+            askQuestion();
+        } else {
+            firstQuestion();
+        }
+    });
+}
 
 function askQuestion() {
     rl.question('What do you want to do? To quit enter \'exit\'.', (answer: any) => {
@@ -27,36 +36,21 @@ function askQuestion() {
     });
 }
 
-function validateAxis(str: any) {
-    if (Number(str) >= 0 && Number(str) <= 5) {
-        return true;
-    }
-    console.log(`${str} is bad value for axis`);
-    return false;
-}
-
-function validateDirection(str: EnumDirectionStrings) {
-    if (Direction[str] != undefined) {
-        return true;
-    }
-    console.log(`${str} is bad direction`);
-    return false;
-}
 
 function createDrone(array: string[]) {
     const optionsArray = array[1].split(",");
-    if (validateAxis(optionsArray[0]) && validateAxis(optionsArray[1]) && validateAxis(optionsArray[2]) && validateDirection(optionsArray[3] as EnumDirectionStrings)) {
-        drone = new Drone(Number(optionsArray[0]), Number(optionsArray[1]), Number(optionsArray[2]), optionsArray[3] as EnumDirectionStrings);
+    if (room.validateAxis(optionsArray[0]) && room.validateAxis(optionsArray[1]) && room.validateAxis(optionsArray[2]) && room.validateDirection(optionsArray[3] as EnumDirectionStrings)) {
+        drone = new Drone(Number(optionsArray[0]), Number(optionsArray[1]), Number(optionsArray[2]), optionsArray[3] as EnumDirectionStrings, room);
         console.log(`Drone was succesfully created with X:${optionsArray[0]}, Y:${optionsArray[1]}, Z:${optionsArray[2]}, F:${optionsArray[3]}`)
+        droneCreated = true;
     }
-
 }
 
 function parseCommand(str: string) {
     const arr = str.split(' ');
     switch (arr[0].toUpperCase()) {
         case 'SPAWN': droneCreated ?
-            console.log(`Drone already was created`) : createDrone(arr)
+            console.log(`Drone was already created`) : createDrone(arr)
             break;
         case 'DOWN': drone.move('DOWN');
             break;
@@ -64,14 +58,14 @@ function parseCommand(str: string) {
             break;
         case 'MOVE': drone.move('MOVE');
             break;
-        case 'REPORT': drone.currentPosition();
+        case 'REPORT': drone.reportPosition();
             break;
         case 'LEFT': drone.changeDirection('LEFT');
             break;
         case 'RIGHT': drone.changeDirection('RIGHT');
             break;
         default:
-            console.log(`Unknown command`);
+            console.log('Unknown command');
     }
 
 } 
