@@ -13,7 +13,7 @@ const rl = readline.createInterface({
 firstQuestion();
 
 function firstQuestion() {
-    rl.question('Lets create new drone? ', (answer: any) => {
+    rl.question('Lets create new drone? ', (answer: string) => {
         parseCommand(answer);
         if (droneCreated) {
             askQuestion();
