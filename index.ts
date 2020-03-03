@@ -24,7 +24,7 @@ function firstQuestion() {
 }
 
 function askQuestion() {
-    rl.question('What do you want to do? To quit enter \'exit\'.', (answer: any) => {
+    rl.question('What do you want to do? To quit enter \'exit\'.', (answer: string) => {
         if (answer === 'exit') {
             console.log(`Bye-bye...`);
             rl.close();
